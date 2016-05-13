@@ -1,6 +1,6 @@
 FROM centos:6
 
-MAINTAINER Phil Elson <pelson.pub@gmail.com>
+MAINTAINER conda-forge <conda-forge@googlegroups.com>
 
 
 # Set an encoding to make things work smoothly.
