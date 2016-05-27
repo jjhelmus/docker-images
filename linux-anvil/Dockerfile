@@ -6,6 +6,9 @@ MAINTAINER conda-forge <conda-forge@googlegroups.com>
 # Set an encoding to make things work smoothly.
 ENV LANG en_US.UTF-8
 
+# Add a timestamp for the build. Also, bust the cache.
+ADD http://www.timeapi.org/utc/now /opt/docker/etc/timestamp
+
 # Install basic requirements.
 RUN yum update -y && \
     yum install -y \
