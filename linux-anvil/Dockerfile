@@ -9,6 +9,9 @@ ENV LANG en_US.UTF-8
 # Add a timestamp for the build. Also, bust the cache.
 ADD http://www.timeapi.org/utc/now /opt/docker/etc/timestamp
 
+# Resolves a nasty NOKEY warning that appears when using yum.
+RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+
 # Install basic requirements.
 RUN yum update -y && \
     yum install -y \
