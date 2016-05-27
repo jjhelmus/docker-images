@@ -53,12 +53,14 @@ RUN curl -s -L -O https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x8
     bash Miniconda3-latest-Linux-x86_64.sh -b -p /opt/conda && rm Miniconda*.sh && \
     export PATH=/opt/conda/bin:$PATH && \
     conda config --set show_channel_urls True && \
-    conda update --all --yes && conda clean -tipsy
+    conda update --all --yes && \
+    conda clean -tipy
 
 # Install Obvious-CI.
 RUN export PATH="/opt/conda/bin:${PATH}" && \
     conda install --yes -c pelson/channel/development obvious-ci && \
-    obvci_install_conda_build_tools.py
+    obvci_install_conda_build_tools.py && \
+    conda clean -tipsy
 
 # udunits2.
 # libtool texinfo
