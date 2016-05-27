@@ -17,7 +17,6 @@ RUN yum update -y && \
     yum install -y \
                    bzip2 \
                    gcc-c++ \
-                   git \
                    make \
                    patch \
                    tar \
@@ -60,6 +59,11 @@ RUN curl -s -L -O https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x8
 RUN export PATH="/opt/conda/bin:${PATH}" && \
     conda install --yes -c pelson/channel/development obvious-ci && \
     obvci_install_conda_build_tools.py && \
+    conda clean -tipsy
+
+# Install conda-forge git.
+RUN export PATH="/opt/conda/bin:${PATH}" && \
+    conda install --yes -c conda-forge git && \
     conda clean -tipsy
 
 # udunits2.
