@@ -58,7 +58,7 @@ RUN curl -s -L -O https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x8
 
 # Install Obvious-CI.
 RUN export PATH="/opt/conda/bin:${PATH}" && \
-    conda install --yes -c pelson/channel/development obvious-ci && \
+    conda install --yes obvious-ci && \
     obvci_install_conda_build_tools.py && \
     conda clean -tipsy
 
