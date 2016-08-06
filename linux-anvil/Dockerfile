@@ -64,7 +64,7 @@ RUN export PATH="/opt/conda/bin:${PATH}" && \
 
 # Install conda-forge git.
 RUN export PATH="/opt/conda/bin:${PATH}" && \
-    conda install --yes -c conda-forge git && \
+    conda install --yes git && \
     conda clean -tipsy
 
 # udunits2.
