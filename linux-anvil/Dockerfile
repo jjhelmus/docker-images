@@ -42,8 +42,8 @@ RUN yum update -y && \
     yum clean all
 
 # Download and install tini for zombie reaping.
-RUN curl -s -L -O https://github.com/krallin/tini/releases/download/v0.9.0/tini && \
-    openssl md5 tini | grep 596b898785d2f169ec969445087c14d6 && \
+RUN curl -s -L -O https://github.com/krallin/tini/releases/download/v0.10.0/tini && \
+    openssl md5 tini | grep 07b74be7c14bae738afff855eb24e0d9 && \
     chmod +x tini && \
     mv tini /usr/local/bin
 
