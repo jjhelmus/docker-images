@@ -67,10 +67,6 @@ RUN export PATH="/opt/conda/bin:${PATH}" && \
     conda install --yes git && \
     conda clean -tipsy
 
-# udunits2.
-# libtool texinfo
-# RUN yum install -y expat-devel
-
 COPY entrypoint_source /opt/docker/bin/entrypoint_source
 COPY entrypoint /opt/docker/bin/entrypoint
 
