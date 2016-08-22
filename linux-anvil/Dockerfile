@@ -67,6 +67,9 @@ RUN export PATH="/opt/conda/bin:${PATH}" && \
     conda install --yes git && \
     conda clean -tipsy
 
+# Add a file for users to source to activate the `conda`
+# environment `root` and the devtoolset compiler. Also
+# add a file that wraps that for use with the `ENTRYPOINT`.
 COPY entrypoint_source /opt/docker/bin/entrypoint_source
 COPY entrypoint /opt/docker/bin/entrypoint
 
