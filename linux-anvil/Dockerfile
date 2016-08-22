@@ -67,14 +67,14 @@ RUN export PATH="/opt/conda/bin:${PATH}" && \
     conda install --yes git && \
     conda clean -tipsy
 
-# udunits2.
-# libtool texinfo
-# RUN yum install -y expat-devel
-
+# Add a file for users to source to activate the `conda`
+# environment `root` and the devtoolset compiler. Also
+# add a file that wraps that for use with the `ENTRYPOINT`.
 COPY entrypoint_source /opt/docker/bin/entrypoint_source
 COPY entrypoint /opt/docker/bin/entrypoint
 
 # Ensure that all containers start with tini and the user selected process.
+# Activate the `conda` environment `root` and the devtoolset compiler.
 # Provide a default command (`bash`), which will start if the user doesn't specify one.
 ENTRYPOINT [ "/usr/local/bin/tini", "--", "/opt/docker/bin/entrypoint" ]
 CMD [ "/bin/bash" ]
