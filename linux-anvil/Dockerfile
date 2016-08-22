@@ -74,6 +74,7 @@ COPY entrypoint_source /opt/docker/bin/entrypoint_source
 COPY entrypoint /opt/docker/bin/entrypoint
 
 # Ensure that all containers start with tini and the user selected process.
+# Activate the `conda` environment `root` and the devtoolset compiler.
 # Provide a default command (`bash`), which will start if the user doesn't specify one.
 ENTRYPOINT [ "/usr/local/bin/tini", "--", "/opt/docker/bin/entrypoint" ]
 CMD [ "/bin/bash" ]
