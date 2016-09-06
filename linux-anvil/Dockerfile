@@ -48,8 +48,10 @@ RUN curl -s -L -O https://github.com/krallin/tini/releases/download/v0.10.0/tini
     mv tini /usr/local/bin
 
 # Install the latest Miniconda with Python 3 and update everything.
-RUN curl -s -L -O https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-    bash Miniconda3-latest-Linux-x86_64.sh -b -p /opt/conda && rm Miniconda*.sh && \
+RUN curl -s -L http://repo.continuum.io/miniconda/Miniconda3-4.1.11-Linux-x86_64.sh > miniconda.sh && \
+    openssl md5 miniconda.sh | grep 874dbb0d3c7ec665adf7231bbb575ab2 && \
+    bash miniconda.sh -b -p /opt/conda && \
+    rm miniconda.sh && \
     export PATH=/opt/conda/bin:$PATH && \
     conda config --set show_channel_urls True && \
     conda config --add channels conda-forge && \
