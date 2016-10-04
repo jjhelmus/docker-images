@@ -18,6 +18,7 @@ RUN yum update -y && \
                    bzip2 \
                    make \
                    patch \
+                   sudo \
                    tar \
                    which \
                    libXext-devel \
@@ -45,6 +46,21 @@ RUN curl -s -L -O https://github.com/krallin/tini/releases/download/v0.10.0/tini
     openssl md5 tini | grep 07b74be7c14bae738afff855eb24e0d9 && \
     chmod +x tini && \
     mv tini /usr/local/bin
+
+# Install gosu to be used in the entrypoint, reason why to use it instead of
+# su or sudo can be found on the project docs
+RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
+RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64" && \
+    openssl sha256 /usr/local/bin/gosu | grep 5b3b03713a888cee84ecbf4582b21ac9fd46c3d935ff2d7ea25dd5055d302d3c && \
+    curl -o /usr/local/bin/gosu.asc -SL "https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64.asc" && \
+    openssl sha256 /usr/local/bin/gosu.asc | grep b026f831a268f6c31daec4234547e4bb0228400babad3d6f6561b6626855af44 && \
+    gpg --verify /usr/local/bin/gosu.asc && \
+    rm /usr/local/bin/gosu.asc && \
+    chmod +x /usr/local/bin/gosu
+
+# give sudo permission for conda user to run yum (user creation is postponed
+# to the entrypoint, so we can create a user with the same id as the host)
+RUN echo 'conda ALL=NOPASSWD: /usr/bin/yum' >> /etc/sudoers
 
 # Install the latest Miniconda with Python 3 and update everything.
 RUN curl -s -L http://repo.continuum.io/miniconda/Miniconda3-4.1.11-Linux-x86_64.sh > miniconda.sh && \
