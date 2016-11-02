@@ -63,7 +63,7 @@ RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/dow
 RUN echo 'conda ALL=NOPASSWD: /usr/bin/yum' >> /etc/sudoers
 
 # Install the latest Miniconda with Python 3 and update everything.
-RUN curl -s -L http://repo.continuum.io/miniconda/Miniconda3-4.1.11-Linux-x86_64.sh > miniconda.sh && \
+RUN curl -s -L https://repo.continuum.io/miniconda/Miniconda3-4.1.11-Linux-x86_64.sh > miniconda.sh && \
     openssl md5 miniconda.sh | grep 874dbb0d3c7ec665adf7231bbb575ab2 && \
     bash miniconda.sh -b -p /opt/conda && \
     rm miniconda.sh && \
