@@ -54,6 +54,11 @@ RUN curl -s -L https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_6
     conda update --all --yes && \
     conda clean -tipy
 
+# Install conda-build
+RUN export PATH="/opt/conda/bin:${PATH}" && \
+    conda install --yes conda-build && \
+    conda clean -tipsy
+
 # Install git using conda.
 RUN export PATH="/opt/conda/bin:${PATH}" && \
     conda install --yes git && \
