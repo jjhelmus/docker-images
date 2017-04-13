@@ -3,8 +3,6 @@ FROM ppc64le/ubuntu:14.04
 # Inspired by linux-anvil from conda-forge
 # https://github.com/conda-forge/docker-images
 
-ENV LANG en_US.UTF-8
-
 # Install basic requirements.
 RUN apt-get update && \
     apt-get install --yes \
@@ -27,13 +25,21 @@ RUN curl -s -L https://repo.continuum.io/miniconda/Miniconda3-4.3.14-Linux-ppc64
 
 # Install conda-build
 RUN export PATH="/opt/conda/bin:${PATH}" && \
-    conda install --yes conda-build
+    conda install --yes conda-build anaconda-client
 
 # Install build tools
 RUN apt-get update && \
     apt-get install --yes \
+        automake \
+        build-essential \
+        gfortran \
         git \
-        build-essential 
+        libncurses-dev \
+        libtool \
+        pkg-config \
+        unzip \
+        vim \
+        zip
 
 ENV PATH="/opt/conda/bin:${PATH}"
 CMD [ "/bin/bash" ]
