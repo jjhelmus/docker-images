@@ -37,12 +37,19 @@ RUN export PATH="/opt/conda/bin:${PATH}" && \
 RUN yum update -y && \
     yum install -y \
         gcc \
-        g++ \
+        gcc-c++ \
         gfortran \
-        libgfortran \
         git \
+        libgfortran \
+        unzip \
         vim \
         zip && \
+    yum clean all
+
+# Install java 8 (for bazel/tensorflow)
+RUN yum update -y && \
+    yum install -y \
+        java-1.8.0-openjdk-devel && \
     yum clean all
 
 ENV PATH="/opt/conda/bin:${PATH}"
