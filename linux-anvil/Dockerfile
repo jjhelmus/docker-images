@@ -73,10 +73,9 @@ RUN curl -s -L https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_6
     conda update --all --yes && \
     conda clean -tipy
 
-# Install Obvious-CI.
+# Install conda build and deployment tools.
 RUN export PATH="/opt/conda/bin:${PATH}" && \
-    conda install --yes obvious-ci && \
-    obvci_install_conda_build_tools.py && \
+    conda install --yes --quiet conda-build anaconda-client jinja2 setuptools && \
     conda clean -tipsy
 
 # Install conda-forge git.
