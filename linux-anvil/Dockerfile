@@ -41,12 +41,6 @@ RUN yum update -y && \
                    devtoolset-2-gcc-c++ && \
     yum clean all
 
-# Download and install tini for zombie reaping.
-RUN curl -s -L -O https://github.com/krallin/tini/releases/download/v0.10.0/tini && \
-    openssl md5 tini | grep 07b74be7c14bae738afff855eb24e0d9 && \
-    chmod +x tini && \
-    mv tini /usr/local/bin
-
 # Install gosu to be used in the entrypoint, reason why to use it instead of
 # su or sudo can be found on the project docs
 RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
@@ -76,11 +70,8 @@ RUN curl -s -L https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_6
 # Install conda build and deployment tools.
 RUN export PATH="/opt/conda/bin:${PATH}" && \
     conda install --yes --quiet conda-build anaconda-client jinja2 setuptools && \
-    conda clean -tipsy
-
-# Install conda-forge git.
-RUN export PATH="/opt/conda/bin:${PATH}" && \
     conda install --yes git && \
+    conda install --yes tini && \
     conda clean -tipsy
 
 # Add a file for users to source to activate the `conda`
@@ -92,5 +83,5 @@ COPY entrypoint /opt/docker/bin/entrypoint
 # Ensure that all containers start with tini and the user selected process.
 # Activate the `conda` environment `root` and the devtoolset compiler.
 # Provide a default command (`bash`), which will start if the user doesn't specify one.
-ENTRYPOINT [ "/usr/local/bin/tini", "--", "/opt/docker/bin/entrypoint" ]
+ENTRYPOINT [ "/opt/conda/bin/tini", "--", "/opt/docker/bin/entrypoint" ]
 CMD [ "/bin/bash" ]
