@@ -1,0 +1,5 @@
+build:
+docker build --network=host -t pkg_build_x86_centos6_dt2 .
+
+run:
+
