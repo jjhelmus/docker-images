@@ -1,15 +1,23 @@
-checkout:
-  post:
-    - ./.circle_support/checkout_merge_commit.sh
+version: 2
 
-machine:
-  services:
-    - docker
+jobs:
+  build:
+    working_directory: ~/test
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Merge PRs
+          command: ./.circle_support/checkout_merge_commit.sh
+      - run:
+          name: Info about provided Docker
+          command: docker info
+      - run:
+          name: Test building image
+          command: docker build -t condaforge/linux-anvil linux-anvil
 
-dependencies:
-  override:
-    - docker info
-
-test:
-  override:
-    - docker build -t condaforge/linux-anvil linux-anvil
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
