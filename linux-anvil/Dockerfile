@@ -7,7 +7,7 @@ MAINTAINER conda-forge <conda-forge@googlegroups.com>
 ENV LANG en_US.UTF-8
 
 # Add a timestamp for the build. Also, bust the cache.
-ADD http://www.timeapi.org/utc/now /opt/docker/etc/timestamp
+ADD http://tycho.usno.navy.mil/timer.html /opt/docker/etc/timestamp
 
 # Resolves a nasty NOKEY warning that appears when using yum.
 RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
@@ -41,12 +41,6 @@ RUN yum update -y && \
                    devtoolset-2-gcc-c++ && \
     yum clean all
 
-# Download and install tini for zombie reaping.
-RUN curl -s -L -O https://github.com/krallin/tini/releases/download/v0.10.0/tini && \
-    openssl md5 tini | grep 07b74be7c14bae738afff855eb24e0d9 && \
-    chmod +x tini && \
-    mv tini /usr/local/bin
-
 # Install gosu to be used in the entrypoint, reason why to use it instead of
 # su or sudo can be found on the project docs
 RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
@@ -63,25 +57,24 @@ RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/dow
 RUN echo 'conda ALL=NOPASSWD: /usr/bin/yum' >> /etc/sudoers
 
 # Install the latest Miniconda with Python 3 and update everything.
-RUN curl -s -L http://repo.continuum.io/miniconda/Miniconda3-4.1.11-Linux-x86_64.sh > miniconda.sh && \
-    openssl md5 miniconda.sh | grep 874dbb0d3c7ec665adf7231bbb575ab2 && \
+RUN curl -s -L https://repo.continuum.io/miniconda/Miniconda3-4.3.21-Linux-x86_64.sh > miniconda.sh && \
+    openssl md5 miniconda.sh | grep c1c15d3baba15bf50293ae963abef853 && \
     bash miniconda.sh -b -p /opt/conda && \
     rm miniconda.sh && \
+    touch /opt/conda/conda-meta/pinned && \
     export PATH=/opt/conda/bin:$PATH && \
     conda config --set show_channel_urls True && \
     conda config --add channels conda-forge && \
     conda update --all --yes && \
     conda clean -tipy
 
-# Install Obvious-CI.
+# Install conda build and deployment tools.
 RUN export PATH="/opt/conda/bin:${PATH}" && \
-    conda install --yes obvious-ci && \
-    obvci_install_conda_build_tools.py && \
-    conda clean -tipsy
-
-# Install conda-forge git.
-RUN export PATH="/opt/conda/bin:${PATH}" && \
+    conda install --yes --quiet conda-build anaconda-client jinja2 setuptools && \
     conda install --yes git && \
+    conda install --yes tini && \
+    export CONDA_TINI_INFO=( `conda list tini | grep tini` ) && \
+    echo "tini ${CONDA_TINI_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
     conda clean -tipsy
 
 # Add a file for users to source to activate the `conda`
@@ -93,5 +86,5 @@ COPY entrypoint /opt/docker/bin/entrypoint
 # Ensure that all containers start with tini and the user selected process.
 # Activate the `conda` environment `root` and the devtoolset compiler.
 # Provide a default command (`bash`), which will start if the user doesn't specify one.
-ENTRYPOINT [ "/usr/local/bin/tini", "--", "/opt/docker/bin/entrypoint" ]
+ENTRYPOINT [ "/opt/conda/bin/tini", "--", "/opt/docker/bin/entrypoint" ]
 CMD [ "/bin/bash" ]
