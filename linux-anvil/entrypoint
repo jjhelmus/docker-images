@@ -10,6 +10,7 @@ export USER=conda
 export LOGNAME=conda
 export MAIL=/var/spool/mail/conda
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/conda/bin
+chown conda:conda $HOME
 chown -R conda:conda /opt/conda
 cp /root/.condarc $HOME/.condarc && chown conda:conda $HOME/.condarc
 cd $HOME
