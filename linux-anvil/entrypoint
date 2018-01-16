@@ -20,4 +20,4 @@ cd $HOME
 . /opt/docker/bin/entrypoint_source
 
 # Run whatever the user wants.
-exec /usr/local/bin/gosu conda "$@"
+exec /opt/conda/bin/gosu conda "$@"
