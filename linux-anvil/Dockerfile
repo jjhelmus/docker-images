@@ -72,6 +72,10 @@ RUN curl -s -L https://repo.continuum.io/miniconda/Miniconda3-4.3.21-Linux-x86_6
 RUN export PATH="/opt/conda/bin:${PATH}" && \
     conda install --yes --quiet conda-build anaconda-client jinja2 setuptools && \
     conda install --yes git && \
+    conda clean -tipsy
+
+# Install docker tools.
+RUN export PATH="/opt/conda/bin:${PATH}" && \
     conda install --yes tini && \
     export CONDA_TINI_INFO=( `conda list tini | grep tini` ) && \
     echo "tini ${CONDA_TINI_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
