@@ -28,19 +28,6 @@ RUN yum update -y && \
                    mesa-libGL-devel && \
     yum clean all
 
-# Install devtoolset 2.
-RUN yum update -y && \
-    yum install -y \
-                   centos-release-scl \
-                   yum-utils && \
-    yum-config-manager --add-repo http://people.centos.org/tru/devtools-2/devtools-2.repo && \
-    yum update -y && \
-    yum install -y \
-                   devtoolset-2-binutils \
-                   devtoolset-2-gcc \
-                   devtoolset-2-gcc-c++ && \
-    yum clean all
-
 # give sudo permission for conda user to run yum (user creation is postponed
 # to the entrypoint, so we can create a user with the same id as the host)
 RUN echo 'conda ALL=NOPASSWD: /usr/bin/yum' >> /etc/sudoers
