@@ -38,6 +38,7 @@ RUN yum update -y && \
     yum install -y \
                    devtoolset-2-binutils \
                    devtoolset-2-gcc \
+                   devtoolset-2-gcc-gfortran \
                    devtoolset-2-gcc-c++ && \
     yum clean all
 
