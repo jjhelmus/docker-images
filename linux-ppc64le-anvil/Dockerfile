@@ -25,6 +25,7 @@ RUN yum update -y && \
                    libXrender-devel \
                    libSM-devel \
                    libX11-devel \
+                   openssl \
                    mesa-libGL-devel && \
     yum clean all
 
@@ -48,16 +49,6 @@ RUN curl -s -L https://repo.continuum.io/miniconda/Miniconda3-4.3.27-Linux-ppc64
 RUN export PATH="/opt/conda/bin:${PATH}" && \
     conda install --yes --quiet conda-build anaconda-client jinja2 setuptools && \
     conda install --yes git && \
-    conda clean -tipsy
-
-# Install docker tools.
-RUN export PATH="/opt/conda/bin:${PATH}" && \
-    conda install --yes gosu && \
-    export CONDA_GOSU_INFO=( `conda list gosu | grep gosu` ) && \
-    echo "gosu ${CONDA_GOSU_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
-    conda install --yes tini && \
-    export CONDA_TINI_INFO=( `conda list tini | grep tini` ) && \
-    echo "tini ${CONDA_TINI_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
     conda clean -tipsy
 
 # Add a file for users to source to activate the `conda`
