@@ -53,7 +53,6 @@ RUN curl -s -L https://repo.continuum.io/miniconda/Miniconda3-4.3.27-Linux-ppc64
     export PATH=/opt/conda/bin:$PATH && \
     conda config --set show_channel_urls True && \
     conda config --add channels conda-forge && \
-    conda config --add channels furmanek && \
     conda update --all --yes && \
     conda clean -tipy
 
