@@ -32,6 +32,7 @@ RUN yum update -y && \
                    libXt \
                    mesa-libGL-devel \
                    mesa-libGLU \
+                   openssl \
                    openssh-clients \
                    rsync \
                    util-linux \
