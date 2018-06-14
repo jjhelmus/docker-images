@@ -67,12 +67,10 @@ RUN export PATH="/opt/conda/bin:${PATH}" && \
     conda install --yes su-exec && \
     export CONDA_SUEXEC_INFO=( `conda list su-exec | grep su-exec` ) && \
     echo "su-exec ${CONDA_SUEXEC_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
+    conda install --yes tini && \
+    export CONDA_TINI_INFO=( `conda list tini | grep tini` ) && \
+    echo "tini ${CONDA_TINI_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
     conda clean -tipsy
-
-# Add tini from git
-ENV TINI_VERSION v0.18.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-ppc64el /tini-ppc64el
-RUN chmod +x /tini-ppc64el
 
 # Add a file for users to source to activate the `conda`
 # environment `root`. Also add a file that wraps that for
@@ -83,5 +81,5 @@ COPY entrypoint /opt/docker/bin/entrypoint
 # Ensure that all containers start with tini and the user selected process.
 # Activate the `conda` environment `root`.
 # Provide a default command (`bash`), which will start if the user doesn't specify one.
-ENTRYPOINT [ "/tini-ppc64el", "--", "/opt/docker/bin/entrypoint" ]
+ENTRYPOINT [ "/opt/conda/bin/tini", "--", "/opt/docker/bin/entrypoint" ]
 CMD [ "/bin/bash" ]
