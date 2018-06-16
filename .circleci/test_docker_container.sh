@@ -9,6 +9,6 @@ touch /opt/conda/bin/test_conda_forge
 conda info
 
 # check that we can install a conda package
-conda install --yes --quiet python -c conda-forge
+conda install --yes --quiet conda-forge-pinning -c conda-forge
 
 touch /home/conda/feedstock_root/build_artifacts/conda-forge-build-done
