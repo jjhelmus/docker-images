@@ -22,10 +22,12 @@ mkdir -p "$ARTIFACTS"
 DONE_CANARY="$ARTIFACTS/conda-forge-build-done"
 rm -f "$DONE_CANARY"
 
+docker build -t linux-anvil-test linux-anvil
+
 docker run -it \
            -v "${FEEDSTOCK_ROOT}":/home/conda/feedstock_root \
            -e HOST_USER_ID \
-           condaforge/linux-anvil \
+           `docker images -q linux-anvil-test` \
            bash \
            /home/conda/feedstock_root/.circleci/test_docker_container.sh
 
