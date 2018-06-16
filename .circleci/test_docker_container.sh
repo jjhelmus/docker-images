@@ -8,4 +8,4 @@ touch /opt/conda/bin/test_conda_forge
 # check that conda is activated
 conda info
 
-touch /home/conda/feedstock_root/conda-forge-build-done
+touch /home/conda/feedstock_root/build_artifacts/conda-forge-build-done
