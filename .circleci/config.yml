@@ -13,7 +13,10 @@ jobs:
           name: Info about provided Docker
           command: docker info
       - run:
-          name: Test building image
+          name: Build image
+          command: docker build -t conda-forge-test linux-anvil
+      - run:
+          name: Test built image
           command: ./.circleci/run_docker_build.sh
 
 workflows:
