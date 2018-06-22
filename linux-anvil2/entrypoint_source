@@ -1,4 +1,2 @@
-# Enable the compiler toolset.
-#
 # Activate the `root` conda environment.
 . /opt/conda/bin/activate root
