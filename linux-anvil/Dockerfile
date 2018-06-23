@@ -74,6 +74,10 @@ RUN export PATH="/opt/conda/bin:${PATH}" && \
     echo "tini ${CONDA_TINI_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
     conda clean -tipsy
 
+# Lucky group gets permissions to write in the conda dir
+RUN groupadd -g 32766 lucky
+RUN chgrp -R lucky /opt/conda && chmod -R g=u /opt/conda
+
 # Add a file for users to source to activate the `conda`
 # environment `root` and the devtoolset compiler. Also
 # add a file that wraps that for use with the `ENTRYPOINT`.
