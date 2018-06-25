@@ -40,37 +40,9 @@ RUN yum update -y && \
                    xorg-x11-server-Xvfb && \
     yum clean all
 
-# give sudo permission for conda user to run yum (user creation is postponed
-# to the entrypoint, so we can create a user with the same id as the host)
-RUN echo 'conda ALL=NOPASSWD: /usr/bin/yum' >> /etc/sudoers
-
-# Install the latest Miniconda with Python 3 and update everything.
-RUN curl -s -L https://repo.continuum.io/miniconda/Miniconda3-4.3.27-Linux-ppc64le.sh > miniconda.sh && \
-    openssl md5 miniconda.sh | grep c51bc5fb00da12b487959b5adf0133ab && \
-    bash miniconda.sh -b -p /opt/conda && \
-    rm miniconda.sh && \
-    touch /opt/conda/conda-meta/pinned && \
-    export PATH=/opt/conda/bin:$PATH && \
-    conda config --set show_channel_urls True && \
-    conda config --add channels conda-forge && \
-    conda update --all --yes && \
-    conda clean -tipy
-
-# Install conda build and deployment tools.
-RUN export PATH="/opt/conda/bin:${PATH}" && \
-    conda install --yes --quiet conda-build anaconda-client jinja2 setuptools && \
-    conda install --yes git && \
-    conda clean -tipsy
-
-# Install docker tools
-RUN export PATH="/opt/conda/bin:${PATH}" && \
-    conda install --yes su-exec && \
-    export CONDA_SUEXEC_INFO=( `conda list su-exec | grep su-exec` ) && \
-    echo "su-exec ${CONDA_SUEXEC_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
-    conda install --yes tini && \
-    export CONDA_TINI_INFO=( `conda list tini | grep tini` ) && \
-    echo "tini ${CONDA_TINI_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
-    conda clean -tipsy
+# Install conda and dependencies
+COPY install_packages /opt/docker/bin/install_packages
+RUN /opt/docker/bin/install_packages
 
 # Add a file for users to source to activate the `conda`
 # environment `root`. Also add a file that wraps that for
