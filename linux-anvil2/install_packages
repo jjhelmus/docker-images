@@ -3,9 +3,11 @@
 if [ "$(uname -m)" = "x86_64" ]; then
    export supkg="gosu"
    export condapkg="Miniconda3-4.3.21-Linux-x86_64.sh"
+   export conda_chksum="c1c15d3baba15bf50293ae963abef853"
 else
    export supkg="su-exec"
    export condapkg="Miniconda3-4.3.27-Linux-ppc64le.sh"
+   export conda_chksum="c51bc5fb00da12b487959b5adf0133ab"
 fi
 
 # give sudo permission for conda user to run yum (user creation is postponed
@@ -14,7 +16,7 @@ echo 'conda ALL=NOPASSWD: /usr/bin/yum' >> /etc/sudoers
 
 # Install the latest Miniconda with Python 3 and update everything.
 curl -s -L https://repo.continuum.io/miniconda/$condapkg > miniconda.sh && \
-    openssl md5 miniconda.sh | grep c51bc5fb00da12b487959b5adf0133ab && \
+    openssl md5 miniconda.sh | grep $conda_chksum && \
     bash miniconda.sh -b -p /opt/conda && \
     rm miniconda.sh && \
     touch /opt/conda/conda-meta/pinned && \
