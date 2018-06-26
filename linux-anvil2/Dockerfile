@@ -2,7 +2,6 @@ FROM ppc64le/centos:7
 
 MAINTAINER conda-forge <conda-forge@googlegroups.com>
 
-
 # Set an encoding to make things work smoothly.
 ENV LANG en_US.UTF-8
 
@@ -40,19 +39,15 @@ RUN yum update -y && \
                    xorg-x11-server-Xvfb && \
     yum clean all
 
-# Install conda and dependencies
-COPY install_packages /opt/docker/bin/install_packages
-RUN /opt/docker/bin/install_packages
-
-# Lucky group gets permission to write in the conda dir
-RUN groupadd -g 32766 lucky
-RUN chgrp -R lucky /opt/conda && chmod -R g=u /opt/conda
+# Run common commands
+COPY scripts/run_commands /opt/docker/bin/run_commands
+RUN /opt/docker/bin/run_commands
 
 # Add a file for users to source to activate the `conda`
 # environment `root`. Also add a file that wraps that for
 # use with the `ENTRYPOINT`.
-COPY entrypoint_source /opt/docker/bin/entrypoint_source
-COPY entrypoint /opt/docker/bin/entrypoint
+COPY linux-anvil2/entrypoint_source /opt/docker/bin/entrypoint_source
+COPY scripts/entrypoint /opt/docker/bin/entrypoint
 
 # Ensure that all containers start with tini and the user selected process.
 # Activate the `conda` environment `root`.
