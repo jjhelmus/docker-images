@@ -44,6 +44,10 @@ RUN yum update -y && \
 COPY install_packages /opt/docker/bin/install_packages
 RUN /opt/docker/bin/install_packages
 
+# Lucky group gets permission to write in the conda dir
+RUN groupadd -g 32766 lucky
+RUN chgrp -R lucky /opt/conda && chmod -R g=u /opt/conda
+
 # Add a file for users to source to activate the `conda`
 # environment `root`. Also add a file that wraps that for
 # use with the `ENTRYPOINT`.
