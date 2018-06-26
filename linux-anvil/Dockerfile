@@ -82,7 +82,7 @@ RUN chgrp -R lucky /opt/conda && chmod -R g=u /opt/conda
 # environment `root` and the devtoolset compiler. Also
 # add a file that wraps that for use with the `ENTRYPOINT`.
 COPY entrypoint_source /opt/docker/bin/entrypoint_source
-COPY entrypoint /opt/docker/bin/entrypoint
+COPY ../linux-anvil2/entrypoint /opt/docker/bin/entrypoint
 
 # Ensure that all containers start with tini and the user selected process.
 # Activate the `conda` environment `root` and the devtoolset compiler.

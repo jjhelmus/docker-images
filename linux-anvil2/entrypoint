@@ -24,4 +24,4 @@ cd $HOME
 . /opt/docker/bin/entrypoint_source
 
 # Run whatever the user wants.
-exec $supkg conda "$@"
+exec /opt/conda/bin/$supkg conda "$@"
