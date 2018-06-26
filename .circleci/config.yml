@@ -8,13 +8,16 @@ jobs:
       - checkout
       - run:
           name: Merge PRs
-          command: ./.circle_support/checkout_merge_commit.sh
+          command: ./.circleci/checkout_merge_commit.sh
       - run:
           name: Info about provided Docker
           command: docker info
       - run:
-          name: Test building image
-          command: docker build -t condaforge/linux-anvil linux-anvil
+          name: Build image
+          command: docker build -t conda-forge-test linux-anvil
+      - run:
+          name: Test built image
+          command: ./.circleci/run_docker_build.sh
 
 workflows:
   version: 2
