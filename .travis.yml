@@ -11,17 +11,17 @@ matrix:
 
 env:
   global:
-    secure: "cf3zAF6MgDe2vRh0A8nXlkBK2sLjsUyWr8L+HUSlmIE3LZtIoelc2smFsA4g4QIwc4w/8yOfju/riEYtVuoHkrk/cuQzdOfJg+MPo9nxl20RS1rOl/DIc5sdim4znuzyjmiPqhkHLeobz75+IPpBttBCVBDC203gqd3IgZ7s8YWZwJmHCWLcVTDVad8hm6KPQy3QN7bd0Lx8PUKfUNkkxqY5T47drmFGIW06DA5lSmOrEj+8stpl+mbY81nZSJWkmCKBJrYgleCLMuBy/JDA48VZtMbBx+ttRslvpFT2PPN1/fDN21DUvXF0eZCCu+nE9ws1pkVPTaFpAhN4s4y+hK2GuiRYKPlrO7gkK0jA+RoIil5wjsBGpr2U2pSt8l6k8Bl+sLRI47IUMFotBquzql7buKixBnZujIZ+UO8JmXxw9HerHzG++Hl/U+g0dU5bt6jxtKinM+hGktGfU+x8ug9Ot1KPJCTSTZXJmxkpLpsDVcVPCQP80P1uBr7wmcKqiEXSMPsPk9NPqbEULd3cukzCoec33pVRiHVULbC8abYYyl0Z9Ozj1VtJQf+8rvBA+ilG+6dx99hHOikf7ugLz9VfuoOiyyHsJwB5sTqKiYgIvDczoVDE+8Z9GywsMy8dhDk1ULbZB5FWYAPYC/s2FLbVDoGu0g+pJllBW/ewy6k="
+    secure: "nM8OaFilQkH14wzD1S6DTGejjo3yL/q/1dpz7144Kw68s8FVqW0zsxCC6960ieokY2LutGSv16qTiIFxnRZnHPCXt7X2MhxcagX8IcMu62DWe2jgqwho0hPI65N/bQYLW1l23e9tjKQxWFZopM4Oyzm6TBqlzibTdbPuQI+YB3RBY0dlkIlupPIYtiNlLRR/HnOyyUny/hg3Z65GWeVpXhiMPqXLlfliTiQ31JgBaNuXiP3/ruSCDeyRPWx62IcPGJ1xVSXL3tvkEI2TpGVCsraKCSbgINhm3AHjQ+8ST6GPMxaOaHrKZzssKJpsZhz1dzWINXTLOQ5LrKtBVwfaevFxDmPEr9RcVlzwAAyuWugCyV4Z6NSt/j2Qqw5qGaiiDHyBH0FMmBgzlPzLZ4JKFsZ68aRkc2qV0MeN0YJRwcQ0EnXRULrcwReBztDHZwixSxqlPpQUwbRr7ne05rBjVoMTKaEhyHPO+KYSwQB1wiQgILBtlP/5ofsYc9Eb46m5JJJhJxuLythKpW9mMqd/US4rQrgEHQ/QRIRYwzGnKf/5WXV3W2o4C9QZpH5Da3J7jOLlqxIY5I+Dv9eEk7XxhT7UaEo7C9tmzjaL2D0yrzPnOnPQhMpmCVNWqdTp1eLcIASKSPbmzz8MuYB5yg48wjXWvDIRBQ6hJyuKHhNGE9k="
 
 before_install:
     - docker info
 
 install:
-    - docker build -t condaforgebot/$DOCKERIMAGE -f $DOCKERIMAGE/Dockerfile .
+    - docker build -t condaforge/$DOCKERIMAGE -f $DOCKERIMAGE/Dockerfile .
 
 script:
     - ./.circleci/run_docker_build.sh
 
 deploy:
   provider: script
-  script: docker login -u condaforgebot -p $DH_PASSWORD && docker push condaforgebot/$DOCKERIMAGE
+  script: docker login -u condaforgebot -p $DH_PASSWORD && docker push condaforge/$DOCKERIMAGE

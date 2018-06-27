@@ -25,7 +25,7 @@ rm -f "$DONE_CANARY"
 docker run -it \
            -v "${FEEDSTOCK_ROOT}":/home/conda/feedstock_root \
            -e HOST_USER_ID \
-           `docker images -q condaforgebot/$DOCKERIMAGE` \
+           `docker images -q condaforge/$DOCKERIMAGE` \
            bash \
            /home/conda/feedstock_root/.circleci/test_docker_container.sh
 
