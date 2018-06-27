@@ -5,14 +5,23 @@ matrix:
   include:
     - os: linux
       env: DOCKERIMAGE=linux-anvil
+
     - os: linux-ppc64le
       env: DOCKERIMAGE=linux-anvil2
+
+env:
+  global:
+    secure: "cf3zAF6MgDe2vRh0A8nXlkBK2sLjsUyWr8L+HUSlmIE3LZtIoelc2smFsA4g4QIwc4w/8yOfju/riEYtVuoHkrk/cuQzdOfJg+MPo9nxl20RS1rOl/DIc5sdim4znuzyjmiPqhkHLeobz75+IPpBttBCVBDC203gqd3IgZ7s8YWZwJmHCWLcVTDVad8hm6KPQy3QN7bd0Lx8PUKfUNkkxqY5T47drmFGIW06DA5lSmOrEj+8stpl+mbY81nZSJWkmCKBJrYgleCLMuBy/JDA48VZtMbBx+ttRslvpFT2PPN1/fDN21DUvXF0eZCCu+nE9ws1pkVPTaFpAhN4s4y+hK2GuiRYKPlrO7gkK0jA+RoIil5wjsBGpr2U2pSt8l6k8Bl+sLRI47IUMFotBquzql7buKixBnZujIZ+UO8JmXxw9HerHzG++Hl/U+g0dU5bt6jxtKinM+hGktGfU+x8ug9Ot1KPJCTSTZXJmxkpLpsDVcVPCQP80P1uBr7wmcKqiEXSMPsPk9NPqbEULd3cukzCoec33pVRiHVULbC8abYYyl0Z9Ozj1VtJQf+8rvBA+ilG+6dx99hHOikf7ugLz9VfuoOiyyHsJwB5sTqKiYgIvDczoVDE+8Z9GywsMy8dhDk1ULbZB5FWYAPYC/s2FLbVDoGu0g+pJllBW/ewy6k="
 
 before_install:
     - docker info
 
 install:
-    - docker build -t condaforge/$DOCKERIMAGE -f $DOCKERIMAGE/Dockerfile .
+    - docker build -t condaforgebot/$DOCKERIMAGE -f $DOCKERIMAGE/Dockerfile .
 
 script:
     - ./.circleci/run_docker_build.sh
+
+deploy:
+  provider: script
+  script: docker login -u condaforgebot -p $DH_PASSWORD && docker push condaforgebot/$DOCKERIMAGE
