@@ -16,7 +16,7 @@ jobs:
           command: docker info
       - run:
           name: Build image
-          command: docker build -t condaforge/$DOCKERIMAGE .
+          command: docker build -t condaforge/$DOCKERIMAGE -f $DOCKERIMAGE/Dockerfile .
       - run:
           name: Test built image
           command: ./.circleci/run_docker_build.sh

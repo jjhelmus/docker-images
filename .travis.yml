@@ -12,7 +12,7 @@ before_install:
     - docker info
 
 install:
-    - docker build -t condaforge/$DOCKERIMAGE .
+    - docker build -t condaforge/$DOCKERIMAGE -f $DOCKERIMAGE/Dockerfile .
 
 script:
     - ./.circleci/run_docker_build.sh
