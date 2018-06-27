@@ -1,0 +1,18 @@
+language: generic
+
+
+matrix:
+  include:
+    - os: linux
+      env: DOCKERIMAGE=linux-anvil
+    - os: linux-ppc64le
+      env: DOCKERIMAGE=linux-anvil2
+
+before_install:
+    - docker info
+
+install:
+    - docker build -t condaforge/$DOCKERIMAGE .
+
+script:
+    - ./.circleci/run_docker_build.sh
