@@ -10,6 +10,11 @@ export USER=conda
 export LOGNAME=conda
 export MAIL=/var/spool/mail/conda
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/conda/bin
+if [ "$(uname -m)" = "x86_64" ]; then
+   export supkg="gosu"
+else
+   export supkg="su-exec"
+fi
 chown conda:conda $HOME
 cp -R /etc/skel $HOME && chown -R conda:conda $HOME/skel && (ls -A1 $HOME/skel | xargs -I {} mv -n $HOME/skel/{} $HOME) && rm -Rf $HOME/skel
 cp /root/.condarc $HOME/.condarc && chown conda:conda $HOME/.condarc
@@ -19,4 +24,4 @@ cd $HOME
 . /opt/docker/bin/entrypoint_source
 
 # Run whatever the user wants.
-exec /opt/conda/bin/gosu conda "$@"
+exec /opt/conda/bin/$supkg conda "$@"

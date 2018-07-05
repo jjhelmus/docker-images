@@ -2,6 +2,8 @@ version: 2
 
 jobs:
   build:
+    environment:
+      DOCKERIMAGE: linux-anvil
     working_directory: ~/test
     machine: true
     steps:
@@ -14,7 +16,7 @@ jobs:
           command: docker info
       - run:
           name: Build image
-          command: docker build -t conda-forge-test linux-anvil
+          command: docker build -t condaforge/$DOCKERIMAGE -f $DOCKERIMAGE/Dockerfile --no-cache .
       - run:
           name: Test built image
           command: ./.circleci/run_docker_build.sh
