@@ -4,12 +4,12 @@ set -exo pipefail
 
 if [ "$(uname -m)" = "x86_64" ]; then
    export supkg="gosu"
-   export condapkg="Miniconda3-4.3.21-Linux-x86_64.sh"
-   export conda_chksum="c1c15d3baba15bf50293ae963abef853"
+   export condapkg="Miniconda3-4.5.4-Linux-x86_64.sh"
+   export conda_chksum="a946ea1d0c4a642ddf0c3a26a18bb16d"
 else
    export supkg="su-exec"
-   export condapkg="Miniconda3-4.3.27-Linux-ppc64le.sh"
-   export conda_chksum="c51bc5fb00da12b487959b5adf0133ab"
+   export condapkg="Miniconda3-4.5.4-Linux-ppc64le.sh"
+   export conda_chksum="05c1e073f262105179cf57920dfc4d43"
 fi
 
 # give sudo permission for conda user to run yum (user creation is postponed
@@ -22,7 +22,9 @@ openssl md5 miniconda.sh | grep $conda_chksum
 bash miniconda.sh -b -p /opt/conda
 rm miniconda.sh
 touch /opt/conda/conda-meta/pinned
-export PATH="/opt/conda/bin:${PATH}"
+ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
+source /opt/conda/etc/profile.d/conda.sh
+conda activate
 conda config --set show_channel_urls True
 conda config --add channels conda-forge
 conda update --all --yes
