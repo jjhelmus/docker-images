@@ -1,5 +1,7 @@
 #!/bin/bash -il
 
+set -exo pipefail
+
 if [ "$(uname -m)" = "x86_64" ]; then
    export supkg="gosu"
    export condapkg="Miniconda3-4.3.21-Linux-x86_64.sh"
@@ -15,32 +17,30 @@ fi
 echo 'conda ALL=NOPASSWD: /usr/bin/yum' >> /etc/sudoers
 
 # Install the latest Miniconda with Python 3 and update everything.
-curl -s -L https://repo.continuum.io/miniconda/$condapkg > miniconda.sh && \
-    openssl md5 miniconda.sh | grep $conda_chksum && \
-    bash miniconda.sh -b -p /opt/conda && \
-    rm miniconda.sh && \
-    touch /opt/conda/conda-meta/pinned && \
-    export PATH=/opt/conda/bin:$PATH && \
-    conda config --set show_channel_urls True && \
-    conda config --add channels conda-forge && \
-    conda update --all --yes && \
-    conda clean -tipy
+curl -s -L https://repo.continuum.io/miniconda/$condapkg > miniconda.sh
+openssl md5 miniconda.sh | grep $conda_chksum
+bash miniconda.sh -b -p /opt/conda
+rm miniconda.sh
+touch /opt/conda/conda-meta/pinned
+export PATH="/opt/conda/bin:${PATH}"
+conda config --set show_channel_urls True
+conda config --add channels conda-forge
+conda update --all --yes
+conda clean -tipy
 
 # Install conda build and deployment tools.
-export PATH="/opt/conda/bin:${PATH}" && \
-    conda install --yes --quiet conda-build anaconda-client jinja2 setuptools && \
-    conda install --yes git && \
-    conda clean -tipsy
+conda install --yes --quiet conda-build anaconda-client jinja2 setuptools
+conda install --yes git
+conda clean -tipsy
 
 # Install docker tools
-export PATH="/opt/conda/bin:${PATH}" && \
-    conda install --yes $supkg && \
-    export CONDA_SUEXEC_INFO=( `conda list $supkg | grep $supkg` ) && \
-    echo "$supkg ${CONDA_SUEXEC_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
-    conda install --yes tini && \
-    export CONDA_TINI_INFO=( `conda list tini | grep tini` ) && \
-    echo "tini ${CONDA_TINI_INFO[1]}" >> /opt/conda/conda-meta/pinned && \
-    conda clean -tipsy
+conda install --yes $supkg
+export CONDA_SUEXEC_INFO=( `conda list $supkg | grep $supkg` )
+echo "$supkg ${CONDA_SUEXEC_INFO[1]}" >> /opt/conda/conda-meta/pinned
+conda install --yes tini
+export CONDA_TINI_INFO=( `conda list tini | grep tini` )
+echo "tini ${CONDA_TINI_INFO[1]}" >> /opt/conda/conda-meta/pinned
+conda clean -tipsy
 
 # Lucky group gets permission to write in the conda dir
 groupadd -g 32766 lucky
