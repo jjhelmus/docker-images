@@ -1,0 +1,2 @@
+# Activate the `base` conda environment.
+. /opt/conda/bin/activate root
