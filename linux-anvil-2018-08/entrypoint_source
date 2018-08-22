@@ -1,3 +1,2 @@
 # Activate the `base` conda environment.
-. /opt/conda/etc/profile.d/conda.sh
 conda activate base
