@@ -1,5 +1,7 @@
 #!/bin/bash -il
 
+set -eo pipefail
+
 if [ "$(uname -m)" = "x86_64" ]; then
    export supkg="gosu"
    export condapkg="Miniconda3-4.3.21-Linux-x86_64.sh"
