@@ -22,7 +22,7 @@ openssl md5 miniconda.sh | grep $conda_chksum
 bash miniconda.sh -b -p /opt/conda
 rm miniconda.sh
 touch /opt/conda/conda-meta/pinned
-export PATH=/opt/conda/bin:$PATH
+export PATH="/opt/conda/bin:${PATH}"
 conda config --set show_channel_urls True
 conda config --add channels conda-forge
 conda update --all --yes
