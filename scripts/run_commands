@@ -20,7 +20,7 @@ echo 'conda ALL=NOPASSWD: /usr/bin/yum' >> /etc/sudoers
 curl -s -L https://repo.continuum.io/miniconda/$condapkg > miniconda.sh
 openssl md5 miniconda.sh | grep $conda_chksum
 bash miniconda.sh -b -p /opt/conda
-rm miniconda.sh
+rm -f miniconda.sh
 touch /opt/conda/conda-meta/pinned
 ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
 source /opt/conda/etc/profile.d/conda.sh
