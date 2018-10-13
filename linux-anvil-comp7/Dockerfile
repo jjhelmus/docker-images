@@ -31,6 +31,27 @@ RUN yum update -y && \
 COPY scripts/run_commands /opt/docker/bin/run_commands
 RUN /opt/docker/bin/run_commands
 
+# Download and cache new compiler packages.
+# Should speedup installation of them on CIs.
+RUN source /opt/conda/etc/profile.d/conda.sh && \
+    conda activate && \
+    conda create -n test --yes --quiet --download-only \
+        conda-forge/label/gcc7::binutils_impl_linux-64 \
+        conda-forge/label/gcc7::binutils_linux-64 \
+        conda-forge/label/gcc7::gcc_impl_linux-64 \
+        conda-forge/label/gcc7::gcc_linux-64 \
+        defaults::gfortran_impl_linux-64 \
+        defaults::gfortran_linux-64 \
+        conda-forge/label/gcc7::gxx_impl_linux-64 \
+        conda-forge/label/gcc7::gxx_linux-64 \
+        conda-forge/label/gcc7::libgcc-ng \
+        defaults::libgfortran-ng \
+        conda-forge/label/gcc7::libstdcxx-ng && \
+    conda remove --yes --quiet -n test --all && \
+    conda clean -tsy && \
+    chgrp -R lucky /opt/conda && \
+    chmod -R g=u /opt/conda
+
 # Add a file for users to source to activate the `conda`
 # environment `base`. Also add a file that wraps that for
 # use with the `ENTRYPOINT`.
