@@ -31,8 +31,7 @@ conda update --all --yes
 conda clean -tipy
 
 # Install conda build and deployment tools.
-conda install --yes --quiet conda-build anaconda-client jinja2 setuptools
-conda install --yes git
+conda install --yes --quiet conda-build anaconda-client jinja2 setuptools git "python=3.6"
 conda clean -tipsy
 
 # Install docker tools
