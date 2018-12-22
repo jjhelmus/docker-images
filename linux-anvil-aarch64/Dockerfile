@@ -4,14 +4,14 @@ RUN conda install constructor
 
 ADD constructors /opt/constructors
 
-RUN cd /opt/constructors/arm64v8 && \ 
+RUN cd /opt/constructors/aarch64 && \ 
     constructor --platform=linux-aarch64 .
 
 FROM arm64v8/centos:7
 
 ADD qemu-aarch64-static /usr/bin/qemu-aarch64-static
 
-MAINTAINER conda-forge <conda-forge@googlegroups.com>
+LABEL maintainer="conda-forge <conda-forge@googlegroups.com>"
 
 # Set an encoding to make things work smoothly.
 ENV LANG en_US.UTF-8
@@ -40,26 +40,27 @@ RUN yum update -y && \
 
 # Run common commands
 
-COPY --from=builder /opt/constructors/arm64v8/conda_bootstrap-1.0.0-Linux-aarch64.sh miniconda.sh
+COPY --from=builder /opt/constructors/aarch64/conda_bootstrap-1.0.0-Linux-aarch64.sh miniconda.sh
 COPY scripts/run_commands /opt/docker/bin/run_commands
 RUN /opt/docker/bin/run_commands
 
 # Download and cache new compiler packages.
 # Should speedup installation of them on CIs.
+ENV _channel="jjhelmus/label/aarch64_bootstrap"
 RUN source /opt/conda/etc/profile.d/conda.sh && \
     conda activate && \
     conda create -n test --yes --quiet --download-only \
-        conda-forge/label/gcc7::binutils_impl_linux-64 \
-        conda-forge/label/gcc7::binutils_linux-64 \
-        conda-forge/label/gcc7::gcc_impl_linux-64 \
-        conda-forge/label/gcc7::gcc_linux-64 \
-        defaults::gfortran_impl_linux-64 \
-        defaults::gfortran_linux-64 \
-        conda-forge/label/gcc7::gxx_impl_linux-64 \
-        conda-forge/label/gcc7::gxx_linux-64 \
-        conda-forge/label/gcc7::libgcc-ng \
-        defaults::libgfortran-ng \
-        conda-forge/label/gcc7::libstdcxx-ng && \
+        $_channel::binutils_impl_linux-aarch64 \
+        $_channel::binutils_linux-aarch64 \
+        $_channel::gcc_impl_linux-aarch64 \
+        $_channel::gcc_linux-aarch64 \
+        $_channel::gfortran_impl_linux-aarch64 \
+        $_channel::gfortran_linux-aarch64 \
+        $_channel::gxx_impl_linux-aarch64 \
+        $_channel::gxx_linux-aarch64 \
+        $_channel::libgcc-ng \
+        $_channel::libgfortran-ng \
+        $_channel::libstdcxx-ng && \
     conda remove --yes --quiet -n test --all && \
     conda clean -tsy && \
     chgrp -R lucky /opt/conda && \
@@ -68,7 +69,7 @@ RUN source /opt/conda/etc/profile.d/conda.sh && \
 # Add a file for users to source to activate the `conda`
 # environment `base`. Also add a file that wraps that for
 # use with the `ENTRYPOINT`.
-COPY linux-anvil-comp7/entrypoint_source /opt/docker/bin/entrypoint_source
+COPY linux-anvil-aarch64/entrypoint_source /opt/docker/bin/entrypoint_source
 COPY scripts/entrypoint /opt/docker/bin/entrypoint
 
 # Ensure that all containers start with tini and the user selected process.

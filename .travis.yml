@@ -14,6 +14,9 @@ matrix:
     - os: linux-ppc64le
       env: DOCKERIMAGE=linux-anvil2
 
+    - os: linux
+      env: DOCKERIMAGE=linux-anvil-aarch64
+
 env:
   global:
     secure: "nM8OaFilQkH14wzD1S6DTGejjo3yL/q/1dpz7144Kw68s8FVqW0zsxCC6960ieokY2LutGSv16qTiIFxnRZnHPCXt7X2MhxcagX8IcMu62DWe2jgqwho0hPI65N/bQYLW1l23e9tjKQxWFZopM4Oyzm6TBqlzibTdbPuQI+YB3RBY0dlkIlupPIYtiNlLRR/HnOyyUny/hg3Z65GWeVpXhiMPqXLlfliTiQ31JgBaNuXiP3/ruSCDeyRPWx62IcPGJ1xVSXL3tvkEI2TpGVCsraKCSbgINhm3AHjQ+8ST6GPMxaOaHrKZzssKJpsZhz1dzWINXTLOQ5LrKtBVwfaevFxDmPEr9RcVlzwAAyuWugCyV4Z6NSt/j2Qqw5qGaiiDHyBH0FMmBgzlPzLZ4JKFsZ68aRkc2qV0MeN0YJRwcQ0EnXRULrcwReBztDHZwixSxqlPpQUwbRr7ne05rBjVoMTKaEhyHPO+KYSwQB1wiQgILBtlP/5ofsYc9Eb46m5JJJhJxuLythKpW9mMqd/US4rQrgEHQ/QRIRYwzGnKf/5WXV3W2o4C9QZpH5Da3J7jOLlqxIY5I+Dv9eEk7XxhT7UaEo7C9tmzjaL2D0yrzPnOnPQhMpmCVNWqdTp1eLcIASKSPbmzz8MuYB5yg48wjXWvDIRBQ6hJyuKHhNGE9k="
@@ -23,9 +26,11 @@ before_install:
     - |
       if [ "$(uname -m)" = "x86_64" ]; then
           docker run --rm --privileged multiarch/qemu-user-static:register --reset
-          wget https://github.com/multiarch/qemu-user-static/releases/download/v3.0.0/qemu-ppc64le-static
-          chmod +x qemu-ppc64le-static
       fi
+      wget https://github.com/multiarch/qemu-user-static/releases/download/v3.0.0/qemu-ppc64le-static
+      chmod +x qemu-ppc64le-static
+      wget https://github.com/multiarch/qemu-user-static/releases/download/v3.0.0/qemu-aarch64-static
+      chmod +x qemu-aarch64-static
 
 install:
     - docker build -t condaforge/$DOCKERIMAGE -f $DOCKERIMAGE/Dockerfile --no-cache .
