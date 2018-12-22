@@ -20,9 +20,12 @@ env:
 
 before_install:
     - docker info
-    - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-    - wget https://github.com/multiarch/qemu-user-static/releases/download/v3.0.0/qemu-ppc64le-static
-    - chmod +x qemu-ppc64le-static
+    - |
+      if [ "$(uname -m)" = "x86_64" ]; then
+          docker run --rm --privileged multiarch/qemu-user-static:register --reset
+          wget https://github.com/multiarch/qemu-user-static/releases/download/v3.0.0/qemu-ppc64le-static
+          chmod +x qemu-ppc64le-static
+      fi
 
 install:
     - docker build -t condaforge/$DOCKERIMAGE -f $DOCKERIMAGE/Dockerfile --no-cache .
