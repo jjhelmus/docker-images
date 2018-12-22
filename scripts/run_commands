@@ -2,6 +2,11 @@
 
 set -exo pipefail
 
+export python_conda_install="python=3.6"
+export additional_channel=""
+export conda_install_supkg="1"
+export conda_install_tini="1"
+
 if [ "$(uname -m)" = "x86_64" ]; then
    export supkg="gosu"
    export condapkg="Miniconda3-4.5.4-Linux-x86_64.sh"
@@ -10,6 +15,15 @@ elif [ "$(uname -m)" = "ppc64le" ]; then
    export supkg="su-exec"
    export condapkg="Miniconda3-4.5.4-Linux-ppc64le.sh"
    export conda_chksum="05c1e073f262105179cf57920dfc4d43"
+elif [ "$(uname -m)" = "aarch64" ]; then
+   export miniconda_downloaded="1"
+   export supkg="gosu"
+   export python_conda_install=""
+   # defaults is not enough
+   export additional_channel="--add channels jjhelmus/label/aarch64_bootstrap"
+   # TODO: Once conda-forge packages these we can remove these flage
+   export conda_install_supkg="0"
+   export conda_install_tini="0"
 else
    exit 1
 fi
@@ -19,8 +33,10 @@ fi
 echo 'conda ALL=NOPASSWD: /usr/bin/yum' >> /etc/sudoers
 
 # Install the latest Miniconda with Python 3 and update everything.
-curl -s -L https://repo.continuum.io/miniconda/$condapkg > miniconda.sh
-openssl md5 miniconda.sh | grep $conda_chksum
+if [ "${miniconda_downloaded}" != "1" ]; then
+   curl -s -L https://repo.continuum.io/miniconda/$condapkg > miniconda.sh
+   openssl md5 miniconda.sh | grep $conda_chksum
+fi
 bash miniconda.sh -b -p /opt/conda
 rm -f miniconda.sh
 touch /opt/conda/conda-meta/pinned
@@ -28,21 +44,42 @@ ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
 source /opt/conda/etc/profile.d/conda.sh
 conda activate
 conda config --set show_channel_urls True
-conda config --add channels conda-forge
+conda config ${additional_channel} --add channels conda-forge
+conda config --show-sources
 conda update --all --yes
 conda clean -tipy
 
 # Install conda build and deployment tools.
-conda install --yes --quiet conda-build anaconda-client jinja2 setuptools git "python=3.6"
+conda install --yes --quiet conda-build anaconda-client jinja2 setuptools git ${python_conda_install}
 conda clean -tipsy
 
 # Install docker tools
-conda install --yes $supkg
-export CONDA_SUEXEC_INFO=( `conda list $supkg | grep $supkg` )
-echo "$supkg ${CONDA_SUEXEC_INFO[1]}" >> /opt/conda/conda-meta/pinned
-conda install --yes tini
-export CONDA_TINI_INFO=( `conda list tini | grep tini` )
-echo "tini ${CONDA_TINI_INFO[1]}" >> /opt/conda/conda-meta/pinned
+if [ "${conda_install_supkg}" == "1" ]; then
+   conda install --yes $supkg
+   export CONDA_SUEXEC_INFO=( `conda list $supkg | grep $supkg` )
+   echo "$supkg ${CONDA_SUEXEC_INFO[1]}" >> /opt/conda/conda-meta/pinned
+else
+   if [ "$(uname -m)" = "aarch64" ]; then
+      curl -s -L "https://github.com/tianon/gosu/releases/download/1.11/gosu-arm64" > /opt/conda/bin/gosu
+      chmod +x /opt/conda/bin/gosu
+   else
+      exit 1
+   fi
+fi
+
+if [ "${conda_install_tini}" == "1" ]; then
+   conda install --yes tini
+   export CONDA_TINI_INFO=( `conda list tini | grep tini` )
+   echo "tini ${CONDA_TINI_INFO[1]}" >> /opt/conda/conda-meta/pinned
+else
+   if [ "$(uname -m)" = "aarch64" ]; then
+      curl -s -L "https://github.com/krallin/tini/releases/download/v0.18.0/tini-static-arm64" > /opt/conda/bin/tini
+      chmod +x /opt/conda/bin/tini
+   else
+      exit 1
+   fi
+fi
+
 conda clean -tipsy
 
 # Lucky group gets permission to write in the conda dir

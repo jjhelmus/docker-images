@@ -1,0 +1,18 @@
+name: conda_bootstrap
+version: 1.0.0
+
+channels:
+  - http://conda.anaconda.org/jjhelmus/label/aarch64_bootstrap
+
+conda_default_channels:
+  - http://conda.anaconda.org/jjhelmus/label/aarch64_bootstrap
+
+specs:
+  - python 3.7
+  - conda
+  - conda-build
+  - pip
+  - anaconda-client
+  - jinja2
+  - setuptools
+  - git

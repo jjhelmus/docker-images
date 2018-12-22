@@ -1,0 +1,2 @@
+# Activate the `base` conda environment.
+conda activate base
