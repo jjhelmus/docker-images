@@ -1,6 +1,5 @@
 language: generic
 
-
 matrix:
   include:
     - os: linux
@@ -8,6 +7,9 @@ matrix:
 
     - os: linux
       env: DOCKERIMAGE=linux-anvil-comp7
+
+    - os: linux
+      env: DOCKERIMAGE=linux-anvil-ppc64le
 
     - os: linux-ppc64le
       env: DOCKERIMAGE=linux-anvil2
@@ -18,6 +20,9 @@ env:
 
 before_install:
     - docker info
+    - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+    - wget https://github.com/multiarch/qemu-user-static/releases/download/v3.0.0/qemu-ppc64le-static
+    - chmod +x qemu-ppc64le-static
 
 install:
     - docker build -t condaforge/$DOCKERIMAGE -f $DOCKERIMAGE/Dockerfile --no-cache .
