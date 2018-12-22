@@ -1,6 +1,6 @@
 FROM centos:6
 
-MAINTAINER conda-forge <conda-forge@googlegroups.com>
+LABEL maintainer="conda-forge <conda-forge@googlegroups.com>"
 
 # Set an encoding to make things work smoothly.
 ENV LANG en_US.UTF-8
