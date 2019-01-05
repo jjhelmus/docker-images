@@ -20,7 +20,7 @@ elif [ "$(uname -m)" = "aarch64" ]; then
    export supkg="gosu"
    export python_conda_install=""
    # defaults is not enough
-   export additional_channel="--add channels jjhelmus/label/aarch64_bootstrap"
+   export additional_channel="--add channels jjhelmus/label/aarch64_bootstrap --add channels c4aarch64"
    # TODO: Once conda-forge packages these we can remove these flage
    export conda_install_supkg="0"
    export conda_install_tini="0"

@@ -46,7 +46,7 @@ RUN /opt/docker/bin/run_commands
 
 # Download and cache new compiler packages.
 # Should speedup installation of them on CIs.
-ENV _channel="jjhelmus/label/aarch64_bootstrap"
+ENV _channel="c4aarch64"
 RUN source /opt/conda/etc/profile.d/conda.sh && \
     conda activate && \
     conda create -n test --yes --quiet --download-only \
