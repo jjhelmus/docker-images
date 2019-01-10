@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -e
+
+{ \
+  echo '#!/bin/sh'; \
+  echo 'set -e'; \
+  echo; \
+  echo 'dirname "$(dirname "$(readlink -f "$(which javac || which java)")")"'; \
+} > /usr/local/bin/docker-java-home
+chmod +x /usr/local/bin/docker-java-home
+
+# do some fancy footwork to create a JAVA_HOME that's cross-architecture-safe
+ln -svT "/usr/lib/jvm/jre-openjdk" /docker-java-home
+
+# deal with slim variants not having man page directories (which causes "update-alternatives" to fail)
+if [ ! -d /usr/share/man/man1 ]; then
+  mkdir -p /usr/share/man/man1
+fi
+
+yum update -y
+yum install -y \
+  java-1.8.0-openjdk-headless-"$JAVA_CENTOS_VERSION" \
+;
+yum clean all
+
+# verify that "docker-java-home" returns what we expect
+[ "$(readlink -f "$JAVA_HOME")" = "$(docker-java-home)" ];
