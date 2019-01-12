@@ -3,11 +3,9 @@ version: 1.0.0
 
 channels:
   - https://conda.anaconda.org/c4aarch64
-  - https://conda.anaconda.org/jjhelmus/label/aarch64_bootstrap
 
 conda_default_channels:
   - https://conda.anaconda.org/c4aarch64
-  - https://conda.anaconda.org/jjhelmus/label/aarch64_bootstrap
 
 specs:
   - python 3.7
