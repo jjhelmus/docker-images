@@ -35,14 +35,14 @@ ARG AGENT_VERSION=3.28
 ARG AGENT_WORKDIR=/home/${user}/agent
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
 
-VOLUME /home/${user}/.jenkins
-VOLUME ${AGENT_WORKDIR}
-
 COPY scripts/setup_jenkins /opt/docker/bin/setup_jenkins
 RUN /opt/docker/bin/setup_jenkins
 
 USER ${user}
 WORKDIR /home/${user}
+
+VOLUME /home/${user}/.jenkins
+VOLUME ${AGENT_WORKDIR}
 
 COPY scripts/jenkins-slave /usr/local/bin/jenkins-slave
 ENTRYPOINT ["/opt/conda/bin/tini", "--", "jenkins-slave"]
