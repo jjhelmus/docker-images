@@ -1,4 +1,4 @@
-FROM condaforge/linux-anvil2
+FROM @BASE_IMAGE@
 
 #
 # Fix a few things for Conda

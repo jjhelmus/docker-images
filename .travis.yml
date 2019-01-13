@@ -26,10 +26,20 @@ before_install:
     - docker info
 
 install:
+    - |
+      if [[ $DOCKERIMAGE =~ ":jnlp-slave" ]]
+      then
+        mkdir -p $DOCKERIMAGE
+        sed "s|@BASE_IMAGE@|condaforge/${DOCKERIMAGE/:.*$/}|" jnlp-slave/Dockerfile.in > $DOCKERIMAGE/Dockerfile
+      fi
     - docker build -t condaforge/$DOCKERIMAGE -f $DOCKERIMAGE/Dockerfile --no-cache .
 
 script:
-    - ./.circleci/run_docker_build.sh
+    - |
+      if ![[ $DOCKERIMAGE =~ "jnlp-slave" ]]
+      then
+        ./.circleci/run_docker_build.sh
+      fi
 
 deploy:
   provider: script
