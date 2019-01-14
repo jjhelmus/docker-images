@@ -30,7 +30,7 @@ install:
       if [[ $DOCKERIMAGE =~ ":jnlp-slave" ]]
       then
         mkdir -p $DOCKERIMAGE
-        sed "s|@BASE_IMAGE@|condaforge/${DOCKERIMAGE/:.*$/}|" jnlp-slave/Dockerfile.in > $DOCKERIMAGE/Dockerfile
+        sed "s|@BASE_IMAGE@|condaforge/${DOCKERIMAGE/:jnlp-slave/}|" jnlp-slave/Dockerfile.in > $DOCKERIMAGE/Dockerfile
       fi
     - docker build -t condaforge/$DOCKERIMAGE -f $DOCKERIMAGE/Dockerfile --no-cache .
 
