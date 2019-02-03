@@ -3,8 +3,6 @@
 set -exo pipefail
 
 export additional_channel=""
-export conda_install_supkg="1"
-export conda_install_tini="1"
 
 if [ "$(uname -m)" = "x86_64" ]; then
    export supkg="gosu"
@@ -15,14 +13,11 @@ elif [ "$(uname -m)" = "ppc64le" ]; then
    export condapkg="https://repo.continuum.io/miniconda/Miniconda3-4.5.4-Linux-ppc64le.sh"
    export conda_chksum="05c1e073f262105179cf57920dfc4d43"
 elif [ "$(uname -m)" = "aarch64" ]; then
+   export supkg="su-exec"
    export condapkg="https://github.com/jjhelmus/conda4aarch64/releases/download/1.0.0/c4aarch64_installer-1.0.0-Linux-aarch64.sh"
    export conda_chksum="7f6f3c6ac5895188766218f222feb131"
-   export supkg="su-exec"
    # defaults is not enough
    export additional_channel="--add channels c4aarch64"
-   # TODO: Once conda-forge packages these we can remove these flage
-   export conda_install_supkg="0"
-   export conda_install_tini="0"
 else
    exit 1
 fi
@@ -52,32 +47,13 @@ conda install --yes --quiet conda-build anaconda-client jinja2 setuptools git py
 conda clean -tipsy
 
 # Install docker tools
-if [ "${conda_install_supkg}" == "1" ]; then
-   conda install --yes $supkg
-   export CONDA_SUEXEC_INFO=( `conda list $supkg | grep $supkg` )
-   echo "$supkg ${CONDA_SUEXEC_INFO[1]}" >> /opt/conda/conda-meta/pinned
-else
-   if [ "$(uname -m)" = "aarch64" ]; then
-      curl -s -L "https://github.com/tianon/gosu/releases/download/1.11/gosu-arm64" > /opt/conda/bin/gosu
-      chmod +x /opt/conda/bin/gosu
-   else
-      exit 1
-   fi
-fi
+conda install --yes $supkg
+export CONDA_SUEXEC_INFO=( `conda list $supkg | grep $supkg` )
+echo "$supkg ${CONDA_SUEXEC_INFO[1]}" >> /opt/conda/conda-meta/pinned
 
-if [ "${conda_install_tini}" == "1" ]; then
-   conda install --yes tini
-   export CONDA_TINI_INFO=( `conda list tini | grep tini` )
-   echo "tini ${CONDA_TINI_INFO[1]}" >> /opt/conda/conda-meta/pinned
-else
-   if [ "$(uname -m)" = "aarch64" ]; then
-      curl -s -L "https://github.com/krallin/tini/releases/download/v0.18.0/tini-static-arm64" > /opt/conda/bin/tini
-      chmod +x /opt/conda/bin/tini
-   else
-      exit 1
-   fi
-fi
-
+conda install --yes tini
+export CONDA_TINI_INFO=( `conda list tini | grep tini` )
+echo "tini ${CONDA_TINI_INFO[1]}" >> /opt/conda/conda-meta/pinned
 conda clean -tipsy
 
 # Lucky group gets permission to write in the conda dir
