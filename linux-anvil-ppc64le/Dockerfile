@@ -49,7 +49,7 @@ RUN /opt/docker/bin/run_commands
 # Add a file for users to source to activate the `conda`
 # environment `root`. Also add a file that wraps that for
 # use with the `ENTRYPOINT`.
-COPY linux-anvil2/entrypoint_source /opt/docker/bin/entrypoint_source
+COPY linux-anvil-ppc64le/entrypoint_source /opt/docker/bin/entrypoint_source
 COPY scripts/entrypoint /opt/docker/bin/entrypoint
 
 # Ensure that all containers start with tini and the user selected process.
