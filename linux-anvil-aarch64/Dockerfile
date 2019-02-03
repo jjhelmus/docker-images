@@ -1,12 +1,3 @@
-FROM continuumio/miniconda3 as builder
-
-RUN conda install constructor
-
-ADD constructors /opt/constructors
-
-RUN cd /opt/constructors/aarch64 && \ 
-    constructor --platform=linux-aarch64 .
-
 FROM arm64v8/centos:7
 
 ADD qemu-aarch64-static /usr/bin/qemu-aarch64-static
@@ -35,12 +26,12 @@ RUN yum update -y && \
                    libXrender-devel \
                    libSM-devel \
                    libX11-devel \
+                   openssl \
+                   openssh-clients \
                    mesa-libGL-devel && \
     yum clean all
 
 # Run common commands
-
-COPY --from=builder /opt/constructors/aarch64/conda_bootstrap-1.0.0-Linux-aarch64.sh miniconda.sh
 COPY scripts/run_commands /opt/docker/bin/run_commands
 RUN /opt/docker/bin/run_commands
 

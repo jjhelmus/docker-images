@@ -2,23 +2,22 @@
 
 set -exo pipefail
 
-export python_conda_install="python=3.6"
 export additional_channel=""
 export conda_install_supkg="1"
 export conda_install_tini="1"
 
 if [ "$(uname -m)" = "x86_64" ]; then
    export supkg="gosu"
-   export condapkg="Miniconda3-4.5.4-Linux-x86_64.sh"
+   export condapkg="https://repo.continuum.io/miniconda/Miniconda3-4.5.4-Linux-x86_64.sh"
    export conda_chksum="a946ea1d0c4a642ddf0c3a26a18bb16d"
 elif [ "$(uname -m)" = "ppc64le" ]; then
    export supkg="su-exec"
-   export condapkg="Miniconda3-4.5.4-Linux-ppc64le.sh"
+   export condapkg="https://repo.continuum.io/miniconda/Miniconda3-4.5.4-Linux-ppc64le.sh"
    export conda_chksum="05c1e073f262105179cf57920dfc4d43"
 elif [ "$(uname -m)" = "aarch64" ]; then
-   export miniconda_downloaded="1"
-   export supkg="gosu"
-   export python_conda_install=""
+   export condapkg="https://github.com/jjhelmus/conda4aarch64/releases/download/1.0.0/c4aarch64_installer-1.0.0-Linux-aarch64.sh"
+   export conda_chksum="7f6f3c6ac5895188766218f222feb131"
+   export supkg="su-exec"
    # defaults is not enough
    export additional_channel="--add channels c4aarch64"
    # TODO: Once conda-forge packages these we can remove these flage
@@ -33,10 +32,9 @@ fi
 echo 'conda ALL=NOPASSWD: /usr/bin/yum' >> /etc/sudoers
 
 # Install the latest Miniconda with Python 3 and update everything.
-if [ "${miniconda_downloaded}" != "1" ]; then
-   curl -s -L https://repo.continuum.io/miniconda/$condapkg > miniconda.sh
-   openssl md5 miniconda.sh | grep $conda_chksum
-fi
+curl -s -L $condapkg > miniconda.sh
+openssl md5 miniconda.sh | grep $conda_chksum
+
 bash miniconda.sh -b -p /opt/conda
 rm -f miniconda.sh
 touch /opt/conda/conda-meta/pinned
@@ -50,7 +48,7 @@ conda update --all --yes
 conda clean -tipy
 
 # Install conda build and deployment tools.
-conda install --yes --quiet conda-build anaconda-client jinja2 setuptools git ${python_conda_install}
+conda install --yes --quiet conda-build anaconda-client jinja2 setuptools git python=3.7
 conda clean -tipsy
 
 # Install docker tools
