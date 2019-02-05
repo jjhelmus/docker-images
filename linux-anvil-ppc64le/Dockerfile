@@ -17,29 +17,12 @@ RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 # Install basic requirements.
 RUN yum update -y && \
     yum install -y \
-                   file \
                    bzip2 \
                    make \
                    patch \
                    sudo \
                    tar \
-                   which \
-                   libXau \
-                   libxcb \
-                   libXdmcp \
-                   libXext-devel \
-                   libXrender-devel \
-                   libSM-devel \
-                   libX11-devel \
-                   libXt \
-                   mesa-libGL-devel \
-                   mesa-libGLU \
-                   openssl \
-                   openssh-clients \
-                   rsync \
-                   util-linux \
-                   wget \
-                   xorg-x11-server-Xvfb && \
+                   which && \
     yum clean all
 
 # Run common commands
