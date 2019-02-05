@@ -21,14 +21,7 @@ RUN yum update -y && \
                    patch \
                    sudo \
                    tar \
-                   which \
-                   libXext-devel \
-                   libXrender-devel \
-                   libSM-devel \
-                   libX11-devel \
-                   openssl \
-                   openssh-clients \
-                   mesa-libGL-devel && \
+                   which
     yum clean all
 
 # Run common commands
