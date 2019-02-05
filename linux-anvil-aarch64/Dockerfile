@@ -21,7 +21,7 @@ RUN yum update -y && \
                    patch \
                    sudo \
                    tar \
-                   which
+                   which && \
     yum clean all
 
 # Run common commands
