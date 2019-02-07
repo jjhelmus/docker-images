@@ -28,7 +28,7 @@ echo 'conda ALL=NOPASSWD: /usr/bin/yum' >> /etc/sudoers
 
 # Install the latest Miniconda with Python 3 and update everything.
 curl -s -L $condapkg > miniconda.sh
-openssl md5 miniconda.sh | grep $conda_chksum
+md5sum miniconda.sh | grep $conda_chksum
 
 bash miniconda.sh -b -p /opt/conda
 rm -f miniconda.sh
