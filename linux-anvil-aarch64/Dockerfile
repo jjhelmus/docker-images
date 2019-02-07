@@ -17,7 +17,6 @@ RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 RUN yum update -y && \
     yum install -y \
                    bzip2 \
-                   make \
                    patch \
                    sudo \
                    tar \
