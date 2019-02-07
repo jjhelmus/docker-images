@@ -12,6 +12,8 @@ export MAIL=/var/spool/mail/conda
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/conda/bin
 if [ "$(uname -m)" = "x86_64" ]; then
    export supkg="gosu"
+elif [ "$(uname -m)" = "aarch64" ]; then
+   export supkg="gosu"
 else
    export supkg="su-exec"
 fi
