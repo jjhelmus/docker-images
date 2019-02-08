@@ -13,7 +13,7 @@ export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/c
 if [ "$(uname -m)" = "x86_64" ]; then
    export supkg="gosu"
 elif [ "$(uname -m)" = "aarch64" ]; then
-   export supkg="gosu"
+   export supkg="su-exec"
 else
    export supkg="su-exec"
 fi
