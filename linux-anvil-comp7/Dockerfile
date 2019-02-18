@@ -6,7 +6,7 @@ LABEL maintainer="conda-forge <conda-forge@googlegroups.com>"
 ENV LANG en_US.UTF-8
 
 # Add a timestamp for the build. Also, bust the cache.
-ADD https://now.httpbin.org/when/now /opt/docker/etc/timestamp
+ADD http://worldclockapi.com/api/json/utc/now /opt/docker/etc/timestamp
 
 # Resolves a nasty NOKEY warning that appears when using yum.
 RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
@@ -14,12 +14,12 @@ RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
 # Install basic requirements.
 RUN yum update -y && \
     yum install -y \
-                   bzip2 \
-                   make \
-                   patch \
-                   sudo \
-                   tar \
-                   which && \
+        bzip2 \
+        make \
+        patch \
+        sudo \
+        tar \
+        which && \
     yum clean all
 
 # Run common commands

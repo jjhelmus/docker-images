@@ -9,8 +9,8 @@ ADD qemu-ppc64le-static /usr/bin/qemu-ppc64le-static
 ENV LANG en_US.UTF-8
 ENV LANGUAGE=en_US.UTF-8
 
-# Add a timestamp for the build. Also, bust the cache.cat /proc/sys/fs/binfmt_misc/ppc64le
-ADD https://now.httpbin.org/when/now /opt/docker/etc/timestamp
+# Add a timestamp for the build. Also, bust the cache.
+ADD http://worldclockapi.com/api/json/utc/now /opt/docker/etc/timestamp
 
 # Resolves a nasty NOKEY warning that appears when using yum.
 RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
