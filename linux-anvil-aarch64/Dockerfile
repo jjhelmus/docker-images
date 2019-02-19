@@ -6,21 +6,29 @@ LABEL maintainer="conda-forge <conda-forge@googlegroups.com>"
 
 # Set an encoding to make things work smoothly.
 ENV LANG en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8
 
 # Add a timestamp for the build. Also, bust the cache.
-# ADD https://now.httpbin.org/when/now /opt/docker/etc/timestamp
+ADD http://worldclockapi.com/api/json/utc/now /opt/docker/etc/timestamp
 
 # Resolves a nasty NOKEY warning that appears when using yum.
 RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 
+# Fix up issues with locales because the default images have these minimized
+# to the point of not being properly functional
+# See: https://github.com/CentOS/sig-cloud-instance-images/issues/71
+RUN yum update -y && \
+    yum reinstall -y glibc-common
+RUN localedef -i en_US -f UTF-8 en_US.UTF-8
+
 # Install basic requirements.
 RUN yum update -y && \
     yum install -y \
-                   bzip2 \
-                   patch \
-                   sudo \
-                   tar \
-                   which && \
+        bzip2 \
+        patch \
+        sudo \
+        tar \
+        which && \
     yum clean all
 
 # Run common commands
