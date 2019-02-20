@@ -31,17 +31,17 @@ RUN /opt/docker/bin/run_commands
 RUN source /opt/conda/etc/profile.d/conda.sh && \
     conda activate && \
     conda create -n test --yes --quiet --download-only \
-        conda-forge/label/gcc7::binutils_impl_linux-64 \
-        conda-forge/label/gcc7::binutils_linux-64 \
-        conda-forge/label/gcc7::gcc_impl_linux-64 \
-        conda-forge/label/gcc7::gcc_linux-64 \
-        defaults::gfortran_impl_linux-64 \
-        defaults::gfortran_linux-64 \
-        conda-forge/label/gcc7::gxx_impl_linux-64 \
-        conda-forge/label/gcc7::gxx_linux-64 \
-        conda-forge/label/gcc7::libgcc-ng \
+        conda-forge::binutils_impl_linux-64 \
+        conda-forge::binutils_linux-64 \
+        conda-forge::gcc_impl_linux-64 \
+        conda-forge::gcc_linux-64 \
+        conda-forge::gfortran_impl_linux-64 \
+        conda-forge::gfortran_linux-64 \
+        conda-forge::gxx_impl_linux-64 \
+        conda-forge::gxx_linux-64 \
+        conda-forge::libgcc-ng \
         defaults::libgfortran-ng \
-        conda-forge/label/gcc7::libstdcxx-ng && \
+        conda-forge::libstdcxx-ng && \
     conda remove --yes --quiet -n test --all && \
     conda clean -tsy && \
     chgrp -R lucky /opt/conda && \
