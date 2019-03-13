@@ -47,7 +47,7 @@ install:
 
 script:
     - |
-      if ![[ $DOCKERIMAGE =~ "jnlp-slave" ]]
+      if [[ ! $DOCKERIMAGE =~ "jnlp-slave" ]]
       then
         ./.circleci/run_docker_build.sh
       fi
