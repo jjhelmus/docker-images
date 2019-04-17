@@ -3,22 +3,34 @@ language: generic
 matrix:
   include:
     - os: linux
-      env: DOCKERIMAGE=linux-anvil
+      env:
+        - DOCKERIMAGE=linux-anvil
+        - DOCKERTAG=latest
 
     - os: linux
-      env: DOCKERIMAGE=linux-anvil:jnlp-slave
+      env:
+        - DOCKERIMAGE=linux-anvil
+        - DOCKERTAG=jnlp-slave
 
     - os: linux
-      env: DOCKERIMAGE=linux-anvil-comp7
+      env:
+        - DOCKERIMAGE=linux-anvil-comp7
+        - DOCKERTAG=latest
 
     - os: linux
-      env: DOCKERIMAGE=linux-anvil-comp7:jnlp-slave
+      env:
+        - DOCKERIMAGE=linux-anvil-comp7
+        - DOCKERTAG=jnlp-slave
       
     - os: linux
-      env: DOCKERIMAGE=linux-anvil-ppc64le
+      env:
+        - DOCKERIMAGE=linux-anvil-ppc64le
+        - DOCKERTAG=latest
 
     - os: linux
-      env: DOCKERIMAGE=linux-anvil-aarch64
+      env:
+        - DOCKERIMAGE=linux-anvil-aarch64
+        - DOCKERTAG=latest
 
 env:
   global:
@@ -37,21 +49,15 @@ before_install:
       chmod +x qemu-aarch64-static
 
 install:
-    - |
-      if [[ $DOCKERIMAGE =~ ":jnlp-slave" ]]
-      then
-        mkdir -p $DOCKERIMAGE
-        sed "s|@BASE_IMAGE@|condaforge/${DOCKERIMAGE/:jnlp-slave/}|" jnlp-slave/Dockerfile.in > $DOCKERIMAGE/Dockerfile
-      fi
-    - docker build -t condaforge/$DOCKERIMAGE -f $DOCKERIMAGE/Dockerfile --no-cache .
+    - docker build -t condaforge/$DOCKERIMAGE:$DOCKERTAG -f $DOCKERIMAGE/Dockerfile --no-cache .
 
 script:
     - |
-      if [[ ! $DOCKERIMAGE =~ "jnlp-slave" ]]
+      if [[ $DOCKERTAG != "jnlp-slave" ]]
       then
         ./.circleci/run_docker_build.sh
       fi
 
 deploy:
   provider: script
-  script: docker login -u condaforgebot -p $DH_PASSWORD && docker push condaforge/$DOCKERIMAGE
+  script: docker login -u condaforgebot -p $DH_PASSWORD && docker push condaforge/$DOCKERIMAGE:$DOCKERTAG
