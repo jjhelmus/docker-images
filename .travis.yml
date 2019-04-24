@@ -50,7 +50,7 @@ before_install:
 
 install:
     - |
-      if [[ $DOCKERTAG != "jnlp-slave" ]]
+      if [[ $DOCKERTAG == "jnlp-slave" ]]
       then
         sed "s|@BASE_IMAGE@|condaforge/${DOCKERIMAGE}|" jnlp-slave/Dockerfile.in > $DOCKERIMAGE/Dockerfile
       fi
