@@ -1,4 +1,6 @@
-FROM centos:6
+ARG CUDA_VER
+
+FROM nvidia/cuda:${CUDA_VER}-devel-centos6
 
 LABEL maintainer="conda-forge <conda-forge@googlegroups.com>"
 
