@@ -55,6 +55,17 @@ RUN source /opt/conda/etc/profile.d/conda.sh && \
     chgrp -R lucky /opt/conda && \
     chmod -R g=u /opt/conda
 
+# Download and cache CUDA related packages.
+RUN source /opt/conda/etc/profile.d/conda.sh && \
+    conda activate && \
+    conda create -n test --yes --quiet --download-only \
+        defaults::cudatoolkit=${CUDA_VER} \
+        defaults::cudnn && \
+    conda remove --yes --quiet -n test --all && \
+    conda clean -tsy && \
+    chgrp -R lucky /opt/conda && \
+    chmod -R g=u /opt/conda
+
 # Add a file for users to source to activate the `conda`
 # environment `base`. Also add a file that wraps that for
 # use with the `ENTRYPOINT`.
