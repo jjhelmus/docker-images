@@ -4,6 +4,9 @@ FROM nvidia/cuda:${CUDA_VER}-devel-centos6
 
 LABEL maintainer="conda-forge <conda-forge@googlegroups.com>"
 
+# Set CUDA_VER during runtime.
+ENV CUDA_VER ${CUDA_VER}
+
 # Set an encoding to make things work smoothly.
 ENV LANG en_US.UTF-8
 
