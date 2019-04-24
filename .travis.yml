@@ -49,6 +49,11 @@ before_install:
       chmod +x qemu-aarch64-static
 
 install:
+    - |
+      if [[ $DOCKERTAG != "jnlp-slave" ]]
+      then
+        sed "s|@BASE_IMAGE@|condaforge/${DOCKERIMAGE}|" jnlp-slave/Dockerfile.in > $DOCKERIMAGE/Dockerfile
+      fi
     - docker build -t condaforge/$DOCKERIMAGE:$DOCKERTAG -f $DOCKERIMAGE/Dockerfile --no-cache .
 
 script:
