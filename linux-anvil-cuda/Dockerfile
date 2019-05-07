@@ -19,6 +19,9 @@ ADD http://worldclockapi.com/api/json/utc/now /opt/docker/etc/timestamp
 # Resolves a nasty NOKEY warning that appears when using yum.
 RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
 
+# Remove preinclude system compilers
+RUN rpm -e --nodeps --verbose gcc gcc-c++
+
 # Install basic requirements.
 RUN yum update -y && \
     yum install -y \
