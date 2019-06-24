@@ -27,7 +27,6 @@ RUN yum update -y && \
     yum install -y \
         bzip2 \
         make \
-        patch \
         sudo \
         tar \
         which && \
