@@ -18,7 +18,8 @@ RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 # to the point of not being properly functional
 # See: https://github.com/CentOS/sig-cloud-instance-images/issues/71
 RUN yum update -y && \
-    yum reinstall -y glibc-common
+    yum reinstall -y glibc-common && \
+    yum clean all
 RUN localedef -i en_US -f UTF-8 en_US.UTF-8
 
 # Install basic requirements.
