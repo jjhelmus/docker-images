@@ -35,7 +35,6 @@ RUN rpm -e --nodeps --verbose gcc gcc-c++
 RUN yum update -y && \
     yum install -y \
         bzip2 \
-        patch \
         sudo \
         tar \
         which && \

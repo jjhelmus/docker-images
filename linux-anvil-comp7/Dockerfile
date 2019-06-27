@@ -23,7 +23,6 @@ RUN localedef -i en_US -f UTF-8 en_US.UTF-8
 RUN yum update -y && \
     yum install -y \
         bzip2 \
-        patch \
         sudo \
         tar \
         which && \
