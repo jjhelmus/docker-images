@@ -70,7 +70,7 @@ install:
       then
         sed "s|@BASE_IMAGE@|condaforge/${DOCKERIMAGE}|" jnlp-slave/Dockerfile.in > $DOCKERIMAGE/Dockerfile
       fi
-    - docker build --build-arg CUDA_VER -t condaforge/$DOCKERIMAGE:$DOCKERTAG -f $DOCKERIMAGE/Dockerfile --no-cache .
+    - docker build --build-arg CUDA_VER -t condaforge/$DOCKERIMAGE:$DOCKERTAG -f $DOCKERIMAGE/Dockerfile --no-cache --squash .
 
 script:
     - |
