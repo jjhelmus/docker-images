@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     environment:
-      DOCKERIMAGE: linux-anvil
+      DOCKERIMAGE: linux-anvil-comp7
     working_directory: ~/test
     machine: true
     steps:
