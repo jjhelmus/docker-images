@@ -48,7 +48,7 @@ before_install:
       if [ "$(uname -m)" = "x86_64" ]; then
           docker run --rm --privileged multiarch/qemu-user-static:register --reset
       fi
-      export QEMU_STATIC_VERSION=v4.0.0-2
+      export QEMU_STATIC_VERSION=v4.0.0-5
       wget https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_STATIC_VERSION}/qemu-ppc64le-static
       wget https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_STATIC_VERSION}/qemu-aarch64-static
       chmod +x qemu-ppc64le-static
