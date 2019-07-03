@@ -25,7 +25,8 @@ RUN yum update -y && \
         sudo \
         tar \
         which && \
-    yum clean all
+    yum clean all && \
+    rm -rf /var/cache/yum/*
 
 # Run common commands
 COPY scripts/run_commands /opt/docker/bin/run_commands
