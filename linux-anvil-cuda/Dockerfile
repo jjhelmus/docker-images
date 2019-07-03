@@ -36,7 +36,8 @@ RUN yum update -y && \
         localedef -i en_US -f UTF-8 en_US.UTF-8 && \
         : > /usr/lib/locale/locale-archive.tmpl ; \
     fi && \
-    yum clean all
+    yum clean all && \
+    rm -rf /var/cache/yum/*
 
 # Run common commands
 COPY scripts/run_commands /opt/docker/bin/run_commands
