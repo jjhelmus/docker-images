@@ -48,7 +48,7 @@ RUN source /opt/conda/etc/profile.d/conda.sh && \
         defaults::libgfortran-ng \
         defaults::libstdcxx-ng && \
     conda remove --yes --quiet -n test --all && \
-    conda clean -tsy && \
+    conda clean -tiy && \
     chgrp -R lucky /opt/conda && \
     chmod -R g=u /opt/conda
 
