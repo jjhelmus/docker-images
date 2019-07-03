@@ -11,7 +11,7 @@ matrix:
       env:
         - DOCKERIMAGE=linux-anvil-comp7
         - DOCKERTAG=jnlp-slave
-      
+
     - os: linux
       env:
         - DOCKERIMAGE=linux-anvil-ppc64le
@@ -48,9 +48,13 @@ before_install:
       if [ "$(uname -m)" = "x86_64" ]; then
           docker run --rm --privileged multiarch/qemu-user-static:register --reset
       fi
-      export QEMU_STATIC_VERSION=v3.1.0-2
+      export QEMU_STATIC_VERSION=v4.0.0-5
+      qemu_ppc64le_sha256=8a62c08b1bf8f65abc9c34bd8d7d31015f16e27c2d78b62367e7b01d5436005b
+      qemu_aarch64_sha256=010b188f02b3b0269ee1618840b058ff05c6bace18421f7db16bee2c8a4a5d13
       wget https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_STATIC_VERSION}/qemu-ppc64le-static
       wget https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_STATIC_VERSION}/qemu-aarch64-static
+      sha256sum qemu-ppc64le-static | grep -F "${qemu_ppc64le_sha256}"
+      sha256sum qemu-aarch64-static | grep -F "${qemu_aarch64_sha256}"
       chmod +x qemu-ppc64le-static
       chmod +x qemu-aarch64-static
 
