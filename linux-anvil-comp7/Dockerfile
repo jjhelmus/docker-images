@@ -18,6 +18,12 @@ RUN yum update -y && \
         sudo \
         tar \
         which && \
+    : '(centos:6 only) If glibc-common is updated, we have to manually purge non-en_US locales.' && \
+    if locale -a | grep nds_DE ; then \
+        mv /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive.tmpl && \
+        localedef -i en_US -f UTF-8 en_US.UTF-8 && \
+        : > /usr/lib/locale/locale-archive.tmpl ; \
+    fi && \
     yum clean all
 
 # Run common commands
