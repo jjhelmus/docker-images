@@ -2,11 +2,11 @@
 
 set -xeuo pipefail
 
-# test for working en_US.UTF-8 locale
+echo 'Validating correctly configured en_US.UTF-8 locale...'
 locale -a | grep -i 'en_US.UTF.\?8'
-[ "$( LC_ALL=en_US.UTF-8 sh -euc : 2>&1 )" = "" ]
+[ "$( LC_ALL=en_US.UTF-8 sh -c : 2>&1 )" = "" ]
 # make sure the above fails for non-existent locale
-[ ! "$( LC_ALL=badlocale sh -euc : 2>&1 )" = "" ]
+[ ! "$( LC_ALL=badlocale sh -c : 2>&1 )" = "" ]
 
 # check that /opt/conda has correct permissions
 touch /opt/conda/bin/test_conda_forge
