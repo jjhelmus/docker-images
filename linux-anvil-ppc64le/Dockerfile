@@ -17,14 +17,14 @@ RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 && \
     rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-AltArch-7-ppc64le
 
 # Install basic requirements.
+COPY scripts/yum_clean_all /opt/docker/bin/
 RUN yum update -y && \
     yum install -y \
         bzip2 \
         sudo \
         tar \
         which && \
-    yum clean all && \
-    rm -rf /var/cache/yum/*
+    /opt/docker/bin/yum_clean_all
 
 # Run common commands
 COPY scripts/run_commands /opt/docker/bin/run_commands

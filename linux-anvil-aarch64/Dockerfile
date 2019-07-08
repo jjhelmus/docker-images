@@ -19,14 +19,14 @@ RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 && \
 # https://github.com/CentOS/sig-cloud-instance-build/commit/2892c17fa8a520e58c3f42cd56587863fe675670
 RUN sed -i 's/override_install_langs=en_US\.UTF-8/override_install_langs=en_US.utf8/' /etc/yum.conf
 # Install basic requirements.
+COPY scripts/yum_clean_all /opt/docker/bin/
 RUN yum update -y && \
     yum install -y \
         bzip2 \
         sudo \
         tar \
         which && \
-    yum clean all && \
-    rm -rf /var/cache/yum/*
+    /opt/docker/bin/yum_clean_all
 
 # Run common commands
 COPY scripts/run_commands /opt/docker/bin/run_commands

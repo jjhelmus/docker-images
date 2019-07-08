@@ -24,20 +24,14 @@ RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
 RUN rpm -e --nodeps --verbose gcc gcc-c++
 
 # Install basic requirements.
+COPY scripts/yum_clean_all /opt/docker/bin/
 RUN yum update -y && \
     yum install -y \
         bzip2 \
         sudo \
         tar \
         which && \
-    : '(centos:6 only) If glibc-common is updated, we have to manually purge non-en_US locales.' && \
-    if locale -a | grep nds_DE ; then \
-        mv /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive.tmpl && \
-        localedef -i en_US -f UTF-8 en_US.UTF-8 && \
-        : > /usr/lib/locale/locale-archive.tmpl ; \
-    fi && \
-    yum clean all && \
-    rm -rf /var/cache/yum/*
+    /opt/docker/bin/yum_clean_all
 
 # Run common commands
 COPY scripts/run_commands /opt/docker/bin/run_commands
