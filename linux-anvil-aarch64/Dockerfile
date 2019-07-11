@@ -12,24 +12,21 @@ ENV LANGUAGE=en_US.UTF-8
 ADD http://worldclockapi.com/api/json/utc/now /opt/docker/etc/timestamp
 
 # Resolves a nasty NOKEY warning that appears when using yum.
-RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 && \
+    rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7-aarch64
 
-# Fix up issues with locales because the default images have these minimized
-# to the point of not being properly functional
-# See: https://github.com/CentOS/sig-cloud-instance-images/issues/71
-RUN yum update -y && \
-    yum reinstall -y glibc-common && \
-    yum clean all
-RUN localedef -i en_US -f UTF-8 en_US.UTF-8
-
+# (arm64v8/centos:7 only) Fix language override to get a working en_US.UTF-8 locale; backports:
+# https://github.com/CentOS/sig-cloud-instance-build/commit/2892c17fa8a520e58c3f42cd56587863fe675670
+RUN sed -i 's/override_install_langs=en_US\.UTF-8/override_install_langs=en_US.utf8/' /etc/yum.conf
 # Install basic requirements.
+COPY scripts/yum_clean_all /opt/docker/bin/
 RUN yum update -y && \
     yum install -y \
         bzip2 \
         sudo \
         tar \
         which && \
-    yum clean all
+    /opt/docker/bin/yum_clean_all
 
 # Run common commands
 COPY scripts/run_commands /opt/docker/bin/run_commands
@@ -53,7 +50,7 @@ RUN source /opt/conda/etc/profile.d/conda.sh && \
         $_channel::libgfortran-ng \
         $_channel::libstdcxx-ng && \
     conda remove --yes --quiet -n test --all && \
-    conda clean -tsy && \
+    conda clean -tiy && \
     chgrp -R lucky /opt/conda && \
     chmod -R g=u /opt/conda
 

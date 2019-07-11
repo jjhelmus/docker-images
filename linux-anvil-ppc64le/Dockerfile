@@ -13,24 +13,18 @@ ENV LANGUAGE=en_US.UTF-8
 ADD http://worldclockapi.com/api/json/utc/now /opt/docker/etc/timestamp
 
 # Resolves a nasty NOKEY warning that appears when using yum.
-RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-
-# Fix up issues with locales because the default images have these minimized
-# to the point of not being properly functional
-# See: https://github.com/CentOS/sig-cloud-instance-images/issues/71
-RUN yum update -y && \
-    yum reinstall -y glibc-common && \
-    yum clean all
-RUN localedef -i en_US -f UTF-8 en_US.UTF-8
+RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 && \
+    rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-AltArch-7-ppc64le
 
 # Install basic requirements.
+COPY scripts/yum_clean_all /opt/docker/bin/
 RUN yum update -y && \
     yum install -y \
         bzip2 \
         sudo \
         tar \
         which && \
-    yum clean all
+    /opt/docker/bin/yum_clean_all
 
 # Run common commands
 COPY scripts/run_commands /opt/docker/bin/run_commands
