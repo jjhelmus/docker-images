@@ -18,6 +18,12 @@ elif [ "$(uname -m)" = "aarch64" ]; then
    export conda_chksum="7f6f3c6ac5895188766218f222feb131"
    # defaults is not enough
    export additional_channel="--add channels c4aarch64"
+elif [ "$(uname -m)" = "armv7l" ]; then
+   export supkg="su-exec"
+   export condapkg="https://github.com/jjhelmus/conda4armv7l/releases/download/1.0.0/conda4armv7l_installer-1.0.0-Linux-armv7l.sh"
+   export conda_chksum="7d1b7b10d5194d8572cc39dd22fe6e18"
+   # defaults is not enough
+   export additional_channel="--add channels c4armv7l"
 else
    exit 1
 fi
